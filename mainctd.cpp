@@ -2,8 +2,26 @@
 #include <string>
 #include <list>
 #include <ctime>
+#include <windows.h>
 
-class TodoItem {
+void setGreenConsole() 
+{
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    // Set green background (BACKGROUND_GREEN) and bright green text (FOREGROUND_GREEN | FOREGROUND_INTENSITY)
+    SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+
+}
+
+
+void resetConsoleColor() {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE); // Default gray
+}
+
+
+
+class TodoItem
+ {
     private:
     int id;
     std::string title;
@@ -29,8 +47,13 @@ class TodoItem {
 };
 
 
+
+
 int main() 
 {
+    // Set green background and text
+    setGreenConsole();
+    
     char choice;
     std::string version = "1.0.0";
     std::list<TodoItem> items;
@@ -97,6 +120,7 @@ int main()
     }
     
     std::cout << "\nPress Enter to exit...";
-    std::cin.get();
+    std::cin.get(); 
+    resetConsoleColor();
     return 0;
 }
