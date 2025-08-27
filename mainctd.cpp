@@ -111,16 +111,22 @@ int main()
         {
             std::cout << "Enter the id of the item to mark as completed: ";
         }
+        else if (choice == 'E' || choice == 'e')
+        {
+            std::cout << "Have a Great day Zuniga\n";
+
+            break; 
+        }    
         
-        
-       
-         break;
-        
+        //the break being here terminated early and couldnt execute before kaput.
     
     }
-    
+
     std::cout << "\nPress Enter to exit...";
-    std::cin.get(); 
+    std::cin.ignore();
+    std::cin.get();
     resetConsoleColor();
+
+
     return 0;
 }
