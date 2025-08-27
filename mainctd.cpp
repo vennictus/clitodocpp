@@ -31,6 +31,7 @@ class TodoItem {
 
 int main() 
 {
+    char choice;
     std::string version = "1.0.0";
     std::list<TodoItem> items;
     std::list<TodoItem>::iterator it;
@@ -39,9 +40,9 @@ int main()
 
     items.clear();
 
-    TodoItem test;
-    test.createItem("test");
-    items.push_back(test);
+  //TodoItem test;
+  //test.createItem("test");
+  //items.push_back(test);
 
 
 
@@ -53,11 +54,44 @@ int main()
 
         for (it = items.begin(); it != items.end(); it++)
         {
-            std::cout << it->getId() << "|" << it->getTitle() << "|" << it->getCompleted() << std::endl;
+            std::string completed_str = it->getCompleted() ? "Completed" : "Not Completed";
+
+            std::cout << it->getId() << "|" << it->getTitle() << "|" << completed_str << std::endl;
             
         }
+        if (items.empty())
+        {
+            std::cout << "No items to display" << std::endl;    
+        }
 
-        break;
+        std::cout << "\n\n";
+        std::cout << "1. [A]dd Item" << std::endl;
+        std::cout << "2. [M]ark Item as Completed" << std::endl;
+        std::cout << "3. [E]xit" << std::endl;
+        
+        std::cout << "\n\n";
+        std::cout << "Enter your choice: ";
+
+
+        std::cin >> choice;
+
+        if (choice == 'A' || choice == 'a')
+        {
+            std::cout << "Enter the title of the item: ";
+            std::string title;
+            std::cin >> title;
+            TodoItem new_item;
+            new_item.createItem(title);
+            items.push_back(new_item);
+        }
+        else if (choice == 'M' || choice == 'm')
+        {
+            std::cout << "Enter the id of the item to mark as completed: ";
+        }
+        
+        
+       
+         break;
         
     
     }
