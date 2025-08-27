@@ -26,11 +26,13 @@ private:
 public:
     TodoItem() : id(0), title(""), completed(false) {}
     ~TodoItem() = default;
-
-    bool createItem(std::string new_title)
+    
+    // FIX 1: Change the function signature to accept an integer 'new_id'
+    bool createItem(int new_id, std::string new_title)
     {
-        // Generates a random integer ID between 1 and 100 to avoid ID 0.
-        id = rand() % 100 + 1;
+        // Now we simply assign the ID that was passed in from main.
+        id = new_id;
+
         title = new_title;
         completed = false;
         return true;
@@ -39,8 +41,7 @@ public:
     int getId() { return id; }
     std::string getTitle() { return title; }
     bool getCompleted() { return completed; }
-    
-    // FIX: Changed 'boolean' to the correct C++ type 'bool'.
+
     void setCompleted(bool val) {
         completed = val;
     }
@@ -49,6 +50,8 @@ public:
 int main()
 {
     setGreenConsole();
+
+    int counter = 1;
 
     char choice;
     std::string version = "1.0.0";
@@ -66,7 +69,6 @@ int main()
 
         for (it = items.begin(); it != items.end(); it++)
         {
-            // IMPROVEMENT: Use [x] and [ ] for a cleaner display.
             std::string completed_str = it->getCompleted() ? "Completed [x] " : "Not Completed [ ] ";
             std::cout << it->getId() << "|" << it->getTitle() << "|" << completed_str << std::endl;
         }
@@ -86,48 +88,50 @@ int main()
         std::cout << "Enter your choice: ";
 
         std::cin >> choice;
-        // FIX: Clear the input buffer after reading a single character.
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         if (choice == 'A' || choice == 'a')
         {
             std::cout << "Enter the title of the item: ";
             std::string title;
-            // FIX: Use std::getline to read a title with spaces.
             std::getline(std::cin, title);
             TodoItem new_item;
-            new_item.createItem(title);
-            items.push_back(new_item);
-        }
-        else if (choice == 'M' || choice == 'm')
-        {
-            std::cout << "Enter the id of the item to mark as completed: ";
-            // FIX: Declare the input_id variable.
-            int input_id;
-            std::cin >> input_id;
-            // FIX: Clear the input buffer after reading the ID.
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             
-            // FIX: Add a flag to check if the item was found.
-            bool found = false;
-            for (it = items.begin(); it != items.end(); it++)
-            {
-                if (input_id == it->getId())
-                {
-                    it->setCompleted(true);
-                    found = true; // Set flag to true
-                    break;        // FIX: Exit the loop once the item is found.
-                }
-            }
-
-            // FIX: Check the flag to inform the user of the result.
-            if (found) {
-                std::cout << "Item " << input_id << " marked as completed.\n";
-            } else {
-                std::cout << "Error: Item with ID " << input_id << " not found.\n";
-            }
-            Sleep(2000); // Pause to let the user see the message.
+            // FIX 2: Pass the 'counter' value to the createItem method, and then increment it.
+            new_item.createItem(counter, title);
+            items.push_back(new_item);
+            counter++;
         }
+            else if (choice == 'M' || choice == 'm')
+    {
+        std::cout << "Enter the id of the item to mark as completed: ";
+        
+        // FIX: Read the input as a string first.
+        std::string input_str;
+        std::getline(std::cin, input_str);
+
+        // This converts the string to an integer.
+        // It's a safer way to handle input.
+        int input_id = std::stoi(input_str);
+        
+        bool found = false;
+        for (it = items.begin(); it != items.end(); it++)
+        {
+            if (input_id == it->getId())
+            {
+                it->setCompleted(true);
+                found = true;
+                break;
+            }
+        }
+
+        if (found) {
+            std::cout << "Item " << input_id << " marked as completed.\n";
+        } else {
+            std::cout << "Error: Item with ID " << input_id << " not found.\n";
+        }
+        Sleep(2000);
+    }
         else if (choice == 'E' || choice == 'e')
         {
             std::cout << "Have a Great day Zuniga\n";
@@ -138,11 +142,9 @@ int main()
             items.clear();
             std::cout << "Cleared Memory\n";
             Sleep(2000);
-
         }
         else
         {
-            // IMPROVEMENT: More descriptive error message.
             std::cout << "Invalid choice. Please try again.\n";
             Sleep(2000);
         }
