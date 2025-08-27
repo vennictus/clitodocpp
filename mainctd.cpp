@@ -72,7 +72,7 @@ int main()
     int counter = 1;
 
     char choice;
-    std::string version = "1.0.0";
+    std::string version = "2.0.0";
     std::list<TodoItem> items;
     std::list<TodoItem>::iterator it;
 
